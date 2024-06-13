@@ -1,5 +1,6 @@
 import Mathlib
 open Nat
+open Rat
 open BigOperators
 open Finset
 open Finset.antidiagonal
@@ -92,9 +93,16 @@ def plane_to_full : plane_tree → full_binary_tree
 
 
 /- ================================= TASK 6: Bin(2n, n) is divisible by n + 1 ================================= -/
--- Proof that (2n choose n) is divisible by (n + 1)
-theorem binom_divisible_by_n_plus_one (n : ℕ) : (choose (2 * n) n) % (n + 1) = 0 := by
- rw [add_mul_mod_self_left]
+-- Prove that 2n-n=n
+theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
+  nth_rewrite 2 [← one_mul n]
+  rw [← Nat.mul_sub_right_distrib]
+  ring
+
+-- Prove that (2n choose n) is divisible by (n + 1)
+theorem binom_divisible_by_n_plus_one (n : ℕ) : (Nat.choose (2 * n) n) / (n + 1) = (Nat.choose (n * n) n) - (Nat.choose (2 * n) (n + 1)) := by
+ rw [choose_eq_factorial_div_factorial]
+ . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul]
 
 
 
