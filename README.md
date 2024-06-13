@@ -1,6 +1,6 @@
 # Catalan-Numbers-in-Lean
 
-This repository contains a collection of definitions, theorems and proofs implemented in Lean 4. The project is organized under the [Project/Basics.lean](Project/Basics.lean) file, and it includes five small tasks and two attempts at larger tasks.
+This repository contains a collection of definitions, theorems and proofs implemented in Lean 4. The project is organized under the [Project/Basic.lean](Project/Basic.lean) file, and it includes five small tasks and two attempts at larger tasks.
 
 ### Small Tasks
 1. Recursive definition of Catalan numbers.
