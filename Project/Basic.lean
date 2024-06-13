@@ -99,12 +99,18 @@ theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
   rw [← Nat.mul_sub_right_distrib]
   ring
 
+-- Prove - n - 1 = - (n + 1)
+theorem minus_n_minus_one_is_minus_n_plus_one (n : ℕ) : (2 * n - n - 1 = 2 * n - (n + 1)) := by
+  rw [Nat.sub_sub]
+
+
 -- Prove that (2n choose n) is divisible by (n + 1)
 theorem binom_divisible_by_n_plus_one (n : ℕ) : (Nat.choose (2 * n) n) / (n + 1) = (Nat.choose (2 * n) (n + 1)) / n := by
  rw [choose_eq_factorial_div_factorial]
  . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul, mul_assoc, mul_comm (n !), mul_comm (n !), ← Nat.factorial_succ]
-   nth_rewrite 3 [← Nat.mul_factorial_pred]
-
+   nth_rewrite 3 [← Nat.mul_factorial_pred, mul_comm]
+   rw [← mul_assoc, ← Nat.div_div_eq_div_mul]
+   nth_rewrite 3 [← two_n_minus_n_is_n n, ]
 
 
 
