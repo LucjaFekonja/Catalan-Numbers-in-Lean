@@ -1,6 +1,6 @@
 # Catalan-Numbers-in-Lean
 
-This repository contains a collection of definitions, theorems and proofs implemented in Lean 4. The project is organized under the Project/Basics.lean file, and it includes five small tasks and two attempts at larger tasks.
+This repository contains a collection of definitions, theorems and proofs implemented in Lean 4. The project is organized under the \path{Project/Basics.lean} file, and it includes five small tasks and two attempts at larger tasks.
 
 ### Small Tasks
 1. Recursive definition of Catalan numbers.
@@ -11,6 +11,6 @@ This repository contains a collection of definitions, theorems and proofs implem
 
 ### Large Tasks
 1. Construction of \textit{rotating isomorphism}.
-2. Proof of $(n + 1) \quad | \quad \binom{2n}{n}$.
+2. Proof of $(n + 1) \hspace{0.25em} | \hspace{0.25em} \binom{2n}{n}$.
 
 This project uses Lean 4 and mathlib library.
