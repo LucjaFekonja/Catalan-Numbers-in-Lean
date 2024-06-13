@@ -11,6 +11,6 @@ This repository contains a collection of definitions, theorems and proofs implem
 
 ### Large Tasks
 1. Construction of \textit{rotating isomorphism}.
-2. Proof of $(n + 1) \t | \t \binom{2n}{n}$.
+2. Proof of $(n + 1) \quad | \quad \binom{2n}{n}$.
 
 This project uses Lean 4 and mathlib library.
