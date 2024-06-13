@@ -102,7 +102,7 @@ theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
 -- Prove that (2n choose n) is divisible by (n + 1)
 theorem binom_divisible_by_n_plus_one (n : ℕ) : (Nat.choose (2 * n) n) / (n + 1) = (Nat.choose (n * n) n) - (Nat.choose (2 * n) (n + 1)) := by
  rw [choose_eq_factorial_div_factorial]
- . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul]
+ . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul, mul_assoc, mul_comm (n !), mul_comm (n !), ← Nat.factorial_succ]
 
 
 
