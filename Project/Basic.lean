@@ -11,7 +11,7 @@ open Finset.antidiagonal
 /- ============================== TASK 1: CATALAN NUMBERS DEFINITION ============================== -/
 -- Recursive definition.
 def catalan_number : ℕ → ℕ
-| 0 => 0
+| 0 => 1
 | (n + 1) => ∑ i : Fin n.succ, catalan_number i * catalan_number (n - i)
 
 
@@ -103,8 +103,8 @@ def plane_to_full : plane_tree → full_binary_tree
 /- ================================= TASK 6: Bin(2n, n) is divisible by n + 1 ================================= -/
 
 -- First we prove that n+1 | (2n choose n) for n=0
-theorem one_div_zero_choose_zero : (Nat.choose (2 * 0) 0) % (0 + 1) = 0 := by
-  rw [mul_zero, zero_add, Nat.choose_zero_right, Nat.mod_self]
+theorem one_div_zero_choose_zero : ((2 * 0).choose 0) % (0 + 1) = 0 := by
+  rw [mul_zero, zero_add, choose_zero_right, mod_self]
 
 -- Proof of 2n-n=n
 theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
@@ -113,9 +113,10 @@ theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
   ring
 
 -- We can rewrite Bin(2n, n)/(n+1) as Bin(2n, n+1)/n.
-theorem binom_div_eq_binom_succ (n : ℕ) (h : 0 < n) : (Nat.choose (2 * n) n) / (n + 1) = (Nat.choose (2 * n) (n + 1)) / n := by
+theorem binom_div_eq_binom_succ (n : ℕ) (h : 0 < n) : ((2 * n).choose n) / (n + 1) = ((2 * n).choose (n + 1)) / n := by
  rw [choose_eq_factorial_div_factorial]
- . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul, mul_assoc, mul_comm (n !), mul_comm (n !), ← Nat.factorial_succ]
+ . rw [two_n_minus_n_is_n, Nat.div_div_eq_div_mul]
+   rw [mul_assoc, mul_comm (n !), mul_comm (n !), ← Nat.factorial_succ]
    nth_rewrite 3 [← Nat.mul_factorial_pred, mul_comm]
    rw [← mul_assoc, ← Nat.div_div_eq_div_mul]
    nth_rewrite 3 [← two_n_minus_n_is_n n]
@@ -134,14 +135,48 @@ theorem binom_div_eq_binom_succ (n : ℕ) (h : 0 < n) : (Nat.choose (2 * n) n) /
 --       subtraction of integers is an integer, the right side is an integer.
 --       Thus (n + 1) divides Bin(2n, n).
 
--- Here is how we wanted to prove that Bin(2n, n)/(n+1) = Bin(2n, n) - Bin(2n, n+1):
+-- Here is how we want to prove that Bin(2n, n)/(n+1) = Bin(2n, n) - Bin(2n, n+1):
 -- Bin(2n, n+1) = Bin(2n, n) - Bin(2n, n)/(n+1)
 --              = (1 - 1/(n+1)) Bin(2n, n)
 --              = n/(n+1) Bin(2n, n)
 -- Therefore Bin(2n, n+1)/n = Bin(2n, n)/(n+1), which is exactly theorem "binom_div_eq_binom_succ".
 
+
+-- this holds also for a, b, c ∈ ℕ
+lemma aux1 (a b c : ℚ) : a - b = c ↔ a - c = b := by
+  rw [sub_eq_iff_eq_add, add_comm, sub_eq_iff_eq_add]
+
+-- this holds also for n ∈ ℕ, n ≠ -1
+lemma aux2 (n : ℚ) (h : n + 1 ≠ 0) : 1 - 1 / (n + 1) = n / (n + 1) := by
+  have h1 : (1 : ℚ) = (n + 1) / (n + 1) := by exact (div_self h).symm
+  nth_rewrite 2 [← add_sub_cancel 1 n, sub_eq_add_neg]
+  rw [← add_assoc, ← div_add_div_same]
+  rw [add_comm 1 n, ← h1]
+  rw [← one_mul (-1 / (n + 1)), mul_div_left_comm]
+  simp
+  rw [sub_eq_add_neg]
+
+-- this holds also for a, b, c ∈ ℕ
+lemma aux3 (a b c : ℚ) : a * (b/c) = b * (a/c) := by
+  rw [mul_div_left_comm]
+
+-- this holds also for a, b, c ∈ ℕ
+lemma aux4 (a b c : ℚ) (h : c ≠ 0) : c * a = b ↔ a = b / c:= by
+  rw [eq_div_iff_mul_eq, mul_comm]
+  apply h
+
+-- Now we use aux1 ... aux4 to prove that we can express Bin(2n, n)/(n+1) as a subtraction of two binomial coefficients
 theorem binom_div_eq_sub_binom (n : ℕ) (h : 0 < n) : (Nat.choose (2 * n) n) - (Nat.choose (2 * n) (n + 1)) = 1 / (n + 1) * (Nat.choose (2 * n) n) := by
- -- rw [Nat.sub_eq_iff_eq_add, add_comm, ← Nat.sub_eq_iff_eq_add]
- -- nth_rewrite 1 [← one_mul (Nat.choose (2 * n) n)]
- -- rw [← Nat.mul_sub_right_distrib]
- sorry
+ have H1 : Nat.choose (2 * n) n - Nat.choose (2 * n) (n + 1) = 1 / (n + 1) * Nat.choose (2 * n) n ↔
+           Nat.choose (2 * n) n - 1 / (n + 1) * Nat.choose (2 * n) n = Nat.choose (2 * n) (n + 1) := by sorry -- Holds by aux1
+ rw [H1]
+ nth_rewrite 1 [← one_mul (Nat.choose (2 * n) n)]
+ rw [← Nat.mul_sub_right_distrib]
+ have H2 : 1 - 1 / (n + 1) = n / (n + 1) := by sorry -- Holds by aux2
+ rw [H2, mul_comm]
+ have H3 : Nat.choose (2 * n) n * (n / (n + 1)) = n * (Nat.choose (2 * n) n / (n + 1)) := by sorry -- Holds by aux3
+ rw [H3]
+ have H4 : n * (Nat.choose (2 * n) n / (n + 1)) = Nat.choose (2 * n) (n + 1) ↔
+          (Nat.choose (2 * n) n / (n + 1)) = Nat.choose (2 * n) (n + 1) / n := by sorry -- Holds by aux4
+ rw [H4, binom_div_eq_binom_succ]
+ . apply h
