@@ -91,6 +91,11 @@ def plane_to_full : plane_tree → full_binary_tree
 
 
 /- ================================= TASK 6: Bin(2n, n) is divisible by n + 1 ================================= -/
+
+-- First we prove that n+1 | (2n choose n) for n=0
+theorem one_div_zero_choose_zero : (Nat.choose (2 * 0) 0) % (0 + 1) = 0 := by
+  rw [mul_zero, zero_add, Nat.choose_zero_right, Nat.mod_self]
+
 -- Proof of 2n-n=n
 theorem two_n_minus_n_is_n (n : ℕ) : (2 * n - n = n) := by
   nth_rewrite 2 [← one_mul n]
