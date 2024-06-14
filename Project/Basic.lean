@@ -18,11 +18,11 @@ def catalan_number : ℕ → ℕ
 /- ================================ TASK 2: PLANE TREES DEFINITION ================================ -/
 -- IDEA 1: Plane tree is completely specified by a number of subtrees.
 inductive plane_tree1 : Type
-| make_plane_tree : (n : ℕ) → (Fin n → plane_tree1) → plane_tree1
+| join : (n : ℕ) → (Fin n → plane_tree1) → plane_tree1
 
 -- IDEA 2: Plane tree is defined with a list of children.
 inductive plane_tree : Type
-| make_plane_tree : List (plane_tree) → plane_tree
+| join : List (plane_tree) → plane_tree
 
 
 /- ============================= TASK 3: FULL BINARY TREES DEFINITION ============================= -/
@@ -74,20 +74,30 @@ inductive ballot_sequence : List Bool → Prop
 /- =================================         LARGE TASKS         ================================== -/
 /- ================================================================================================ -/
 
+/- =============== TASK 4: ISOMORPHISM BETWEEN PLANE TREES AND A LIST OF PLANE TREES ============== -/
+-- Construct a list of plane trees from a list of children.
+def plane_to_list : plane_tree → List plane_tree
+| .join L => L
+
+-- Construct a plane tree by defining a list as children of root node.
+def list_to_plane : List plane_tree → plane_tree
+| L => .join L
+
+
 /- ================================= TASK 5: ROTATING ISOMORPHISM ================================= -/
 -- Leaf of a full binary tree is a plane tree with an empty list of subnodes.
 -- Other nodes have two subnodes, which are recursively mapped into a list of children of a plane tree.
 def full_to_plane : full_binary_tree → plane_tree
-| full_binary_tree.leaf => plane_tree.make_plane_tree []
-| (full_binary_tree.join left right) => plane_tree.make_plane_tree [full_to_plane left, full_to_plane right]
+| full_binary_tree.leaf => plane_tree.join []
+| (full_binary_tree.join left right) => plane_tree.join [full_to_plane left, full_to_plane right]
 
 -- Plane tree with an empty list of subnodes is mapped to a full binary tree with only one node - root.
 -- Otherwise, list of subnodes is not empty, and we set head of a list as the left subnode and
 -- everything else as the right, recurively calling plane_to_full on both sides.
 def plane_to_full : plane_tree → full_binary_tree
-| (plane_tree.make_plane_tree []) => full_binary_tree.leaf
-| (plane_tree.make_plane_tree (h :: t)) =>
-  full_binary_tree.join (plane_to_full h) (plane_to_full (plane_tree.make_plane_tree t))
+| (plane_tree.join []) => full_binary_tree.leaf
+| (plane_tree.join (h :: t)) =>
+  full_binary_tree.join (plane_to_full h) (plane_to_full (plane_tree.join t))
 
 
 /- ================================= TASK 6: Bin(2n, n) is divisible by n + 1 ================================= -/
