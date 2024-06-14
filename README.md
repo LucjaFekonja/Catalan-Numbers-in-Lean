@@ -10,7 +10,7 @@ This repository contains a collection of definitions, theorems and proofs implem
 5. Implementation of Ballot sequence.
 
 ### Large Tasks
-1. Construction of \textit{rotating isomorphism}.
+1. Construction of *rotating isomorphism*.
 2. Proof of $(n + 1) \hspace{0.25em} | \hspace{0.25em} \binom{2n}{n}$.
 
 This project uses Lean 4 and mathlib library.
